@@ -16,7 +16,7 @@ def changeRGB(pin9, pin10, pin11):
     p11.value(pin11)
 
 
-pycom.heartbeat(False)
+pycom.heartbeat(False) # ปิดไฟกระพริบ
 while True:
     pycom.rgbled(0x007f00) # green
     changeRGB(0, 1, 1)
