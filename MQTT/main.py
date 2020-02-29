@@ -1,4 +1,3 @@
-
 from machine import ADC, DAC
 import time
 
@@ -16,22 +15,23 @@ p_output = DAC("P22")                                # analog output
 ###################################
 #              MQTT
 ###################################
-# ต่อ wifi
+#             ต่อ wifi
+
 wlan = WLAN(mode=WLAN.STA)
 nets = wlan.scan()
 
 for net in nets:
     print(net)
-    if net.ssid == '@305':                 # <<< ชื่อ wifi 
-        print('[wifi] found....%s' % net.ssid)
-        wlan.connect(net.ssid, auth=(net.sec, '0892322022'), timeout=10000)
+    if net.ssid == '@305':                                                     # ชื่อ wifi 
+        print('[wifi] found.... %s' % net.ssid)
+        wlan.connect(net.ssid, auth=(net.sec, 'xxxxxxxx'), timeout=10000)    # password
         while not wlan.isconnected():
             machine.idle()
         print('[wifi] connected..!!')
         break
 
 
-# subscribe and publish to MQTT
+# # subscribe and publish to MQTT
 def sub_cb(topic, msg): # callback เพื่อบอกว่าเวลาได้ค่ามา ให้ทำอะไรต่อ
     print(msg)
 
@@ -42,7 +42,7 @@ client.subscribe(topic="kmitl/one")
 
 while True:
     # print(p_input() / 4095)
-    p_output.write(p_input() / 4095) # analog output
+    p_output.write(p_input() / 4095)                             # analog output
     client.publish(topic="kmitl", msg="%f" % (p_input() / 4095))
+    client.check_msg()                                           # ตรวจสอบว่ามี messages เข้ามาหรือเปล่า
     time.sleep(1)
-
